@@ -1,3 +1,18 @@
 language: node_js
 node_js:
   - 14
+services:
+  - docker
+before_install:
+  - docker build -t borolgs/nodehwi .
+  - docker run -p 8000:8000 -d --name nodehw borolgs/nodehwi:latest
+script:
+  - docker exec -it nodehw sh -c "npm test"
+deploy:
+  provider: heroku
+  api_key:
+    secure: ZU7xlmQV5nabKOwpYY5Pol6m6RJreM+pu7cUDNMZsKaat7Qx3up5Hh8v1nxjXTr8TSKOOQNmrkOSUOl8IyGV8SDOeag4o7mzuEFPlYbnc3+DJ8ob+NauHdCorszbF5AhWw4moFkTXkJy7yiqcYCAgyRTEsKibsP9i3Wv9RKJ+tjy4/9Qp51PWOmLS8By7OWiK0GIxuzSXcZAHqtzs9YPCi7YnpKmIIeHU/woz2hyFGkNkMvR1/oO6wpOW8ByREqVnDoF2qbxNytWozPv8q2jctwvW9kfpFKGqri3IxHJDhXeGOIyTgpYpzEP1abL1Pbjt+y3obGzcStifcYTgd6P3mkHNWPlvZBcMqgyTOG57VgfZugcojF2iI82AVQU5NRCBs6hltozGh0vuipMRkRqqYMqY3wrcfDWzlct/RR7BAGoycuBqSMjXsxzm+bzJbPj0MaQsBDn38+2ulHziYgYVMTqkU91BHzcJhZ1sCPQsL8Gr68WD3ndx8tGwI7zl1Y4JXvkYXB+Z0JQjPxGZ10IFuk/wvj3Ll1beKLqTR6SavqieoEDgEAMltDUFLsXcO5lNIpc61XVpFcO4RfLMIX+dhcJxc/hyuoonabkhq6t69YUkPXmNy7RvKsTHbPbl9OE+q7/dYPW0o1Eti3D5p/A6tW63mONnQoUOZ3IQJ1Y+FQ=
+  app: nodejs-docker-travis-example
+  on:
+    repo: borolgs/nodejs-docker-travis-example
+  skip_cleanup: 'true'
